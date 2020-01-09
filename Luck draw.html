@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>幸运大抽奖</title>
+  <style>
+    .main {
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      background-color: rgb(77, 11, 15);
+      background-image: url("./img/bg.jpg");
+      background-size: 100%;
+      /*background-color: rgb(5, 11, 39);*/
+      /*background-image: url("./img/bg2.jpg");*/
+      /*background-position: center center;*/
+      /*background-size: contain;*/
+      background-repeat: no-repeat;
+      min-height: 769px;
+      min-width: 1440px;
+    }
+
+    .fireworks {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-left: -331px;
+      margin-top: -441px;
+      width: 662px;
+      height: 662px;
+      z-index: 99;
+    }
+    .machine {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-left: -276.5px;
+      margin-top: -230.5px;
+      width: 553px;
+      height: 461px;
+      background-image: url("./img/machine.png");
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+    }
+
+    .luck-item {
+      position: absolute;
+      top: 68px;
+      left: 112.5px;
+      width: 330px;
+      height: 162px;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .item-num {
+      line-height: 162px;
+      color: #fffefe;
+      font-size: 96px;
+      font-weight: bold;
+    }
+
+    .item-txt {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      transform: translateY(-50%);
+      padding-left: 30px;
+      padding-right: 30px;
+      line-height: 50px;
+      color: #fffefe;
+      font-size: 32px;
+      font-weight: bold;
+      text-align: left;
+    }
+    .item-img {
+      height: 100%;
+      background-size: contain;
+      background-position: center center;
+      background-repeat: no-repeat;
+    }
+
+    .item-pic {
+      line-height: 162px;
+      color: #fffefe;
+      font-size: 96px;
+      font-weight: bold;
+    }
+
+    .handle-btn {
+      position: absolute;
+      width: 273px;
+      height: 89px;
+      left: 140px;
+      bottom: 100px;
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+      z-index: 999;
+    }
+    .start-btn {
+      background-image: url("./img/start-btn.png");
+    }
+    .end-btn {
+      background-image: url("./img/end-btn.png");
+    }
+
+    .tab-blk {
+      position: absolute;
+      right: 30px;
+      top: 30px;
+    }
+
+    .tab-item {
+      display: block;
+      width: 231px;
+      height: 60px;
+      margin-bottom: -6px;
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+    }
+
+    .tab-item-number {
+      background-image: url("img/number-btn.png");
+    }
+
+    .tab-item-pic {
+      background-image: url("./img/pic-btn.png");
+    }
+
+    .tab-item-luck {
+      background-image: url("./img/luck-btn.png");
+    }
+
+    .tab-item-big-luck {
+      background-image: url("./img/big-luck-btn.png");
+    }
+
+    .active.tab-item-number {
+      background-image: url("./img/number-active-btn.png");
+    }
+
+    .active.tab-item-pic {
+      background-image: url("./img/pic-active-btn.png");
+    }
+
+    .active.tab-item-luck {
+      background-image: url("./img/luck-active-btn.png");
+    }
+
+    .active.tab-item-big-luck {
+      background-image: url("./img/big-luck-active-btn.png");
+    }
+
+    .winning-blk {
+      position: absolute;
+      right: 30px;
+      bottom: 30px;
+      width: 308px;
+      height: 458px;
+      background-image: url("./img/luck-list.png");
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+    }
+    .clearLuck {
+      position: absolute;
+      bottom: 10px;
+      left: 83px;
+      width: 142px;
+      height: 47px;
+      background-image: url("./img/clearLuck.png");
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+    }
+    .luck-res {
+      margin-top: 94px;
+      height: 300px;
+      overflow-y: scroll;
+    }
+    .luck-res::-webkit-scrollbar {
+      width: 2px;
+      background: none;
+    }
+    .luck-res-blk {
+      position: relative;
+      float: left;
+      margin-left: 27px;
+      margin-bottom: 16px;
+      height: 58px;
+      width: 58px;
+      background-color: #f67828;
+      border: 4px solid #ffd859;
+      border-radius: 33px;
+      color: #fffefe;
+      font-size: 33px;
+      text-align: center;
+      line-height: 58px;
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+    .remove-btn {
+      height: 58px;
+      width: 58px;
+      background-color: rgba(0,0,0,.3);
+      border-radius: 29px;
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+    .luck-res-pic,
+    .luck-res-num {
+      overflow: hidden;
+    }
+    .luck-res-txt {
+      margin-left: 27px;
+      margin-right: 27px;
+    }
+    .luck-res-txt-item {
+      padding-top: 8px;
+      padding-bottom: 12px;
+      font-size: 24px;
+      color: #f47426;
+      background-image: url('./img/line.png');
+      background-repeat: no-repeat;
+      background-size: 100% auto;
+      background-position: center bottom;
+      overflow: hidden;
+      text-overflow:ellipsis;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+<div class="main" id="app">
+  <div class="machine">
+    <div v-if="(!showStartBtn)&&(prize[luckKind][luckIdx])" class="luck-item"><!--防止为空-->
+      <span v-if="prize[luckKind][luckIdx].type==='num'" class="item-num" v-html="prize[luckKind][luckIdx].value"></span>
+      <span v-if="prize[luckKind][luckIdx].type==='txt'" class="item-txt" v-html="prize[luckKind][luckIdx].value" :title="prize[luckKind][luckIdx].value"></span>
+      <div v-if="prize[luckKind][luckIdx].type==='pic'" class="item-img" :style="'background-image: url('+prize[luckKind][luckIdx].value+')'"></div>
+    </div>
+    <div v-if="showStartBtn" class="luck-item">
+      <span v-if="luck.type==='num'" class="item-num" v-html="luck.value"></span>
+      <span v-if="luck.type==='txt'" class="item-txt" v-html="luck.value" :title="luck.value"></span>
+      <div v-if="luck.type==='pic'" class="item-img" :style="'background-image: url('+luck.value+')'"></div>
+    </div>
+    <a @click="startDraw" v-show="showStartBtn" class="handle-btn start-btn" href="javascript:;"></a>
+    <a @click="endDraw" v-show="!showStartBtn" class="handle-btn end-btn" href="javascript:;"></a>
+  </div>
+  <div class="tab-blk">
+    <a @click="luckKindChange('_1')" :class="(luckKind==='_1'?'active ': '')+'tab-item tab-item-number'" href="javascript:;"></a>
+    <a @click="luckKindChange('_2')" :class="(luckKind==='_2'?'active ': '')+'tab-item tab-item-pic'" href="javascript:;"></a>
+    <a @click="luckKindChange('_3')" :class="(luckKind==='_3'?'active ': '')+'tab-item tab-item-luck'" href="javascript:;"></a>
+    <a @click="luckKindChange('_4')" :class="(luckKind==='_4'?'active ': '')+'tab-item tab-item-big-luck'" href="javascript:;"></a>
+  </div>
+  <div class="winning-blk">
+    <a @click="removeAll" class="clearLuck" href="javascript:;"></a>
+    <div class="luck-res">
+      <div class="luck-res-pic">
+        <div v-for="(item, index) in luckResForShow.picList" :key="index" class="luck-res-blk" :style="'background-image: url('+(item.value)+')'">
+<!--          <div @click="removeLuck(item.kind || '_2', item.value)" class="remove-btn"></div>-->
+        </div>
+      </div>
+      <div class="luck-res-num">
+        <div v-for="(item, index) in luckResForShow.numList" :key="index" class="luck-res-blk luck-res-num" v-html="item.value">
+<!--          <div @click="removeLuck('_1', item.value)" class="remove-btn"></div>-->
+        </div>
+      </div>
+      <div class="luck-res-txt">
+        <div v-for="(item, index) in luckResForShow.txtList" :key="index" class="luck-res-txt-item" v-html="item.value" :title="item.value">
+<!--          <div @click="removeLuck(item.kind || '_3', item.value)" class="remove-btn"></div>-->
+        </div>
+      </div>
+    </div>
+  </div>
+  <img v-show="showFireworks" class="fireworks" src="./img/fireworks.gif">
+</div>
+<script src="./js/vue.min.js"></script>
+<script>
+  const app = new Vue({
+    el: '#app',
+    created() {
+      // 根据缓存初始化奖池
+      if (localStorage.getItem("luckRes")) {
+        this.luckRes = JSON.parse(localStorage.getItem("luckRes"))
+        for(const prop in this.luckRes) {
+          this.luckRes[prop].forEach((item) => {
+            this.prize[prop].forEach((originItem, orgIdx) => {
+              if (item.value === originItem.value) {
+                this.prize[prop].splice(orgIdx, 1)
+              }
+            })
+          })
+        }
+      }
+      // console.log(this.prize)
+      this.luckKind = '_1'
+      this.luck = this.prize[this.luckKind][0] || {}
+    },
+    computed: {
+      luckResForShow() {
+        let o = {
+          numList: this.luckRes._1.concat([]),
+          picList: this.luckRes._2.concat([]),
+          txtList: this.luckRes._3.concat([])
+        }
+        // console.log('this.luckRes._4: ', this.luckRes._4)
+        // console.log('this.luckRes._2: ', this.luckRes._2)
+        this.luckRes._4.concat([]).forEach((item) => {
+          // console.log('item: ', item)
+          item.kind = '_4'
+          if (item.type === 'pic') {
+            o.picList.push(item)
+          }
+          if (item.type === 'txt') {
+            o.txtList.push(item)
+          }
+        })
+        // console.log('o: ', o)
+        return o
+      }
+    },
+    data: {
+      luckRes: {
+        // 数字
+        _1: [],
+        // 照片
+        _2: [],
+        // 奖励
+        _3: [],
+        // 超级大奖
+        _4: []
+      },
+      showFireworks: false,
+      timer: null,
+      showStartBtn: true,
+      luckKind: '',
+      luckIdx: 0,
+      luck: {},
+      prize: {
+        // 数字奖池
+        _1: [
+          { type: 'num', value: '00' },
+          { type: 'num', value: '01' },
+          { type: 'num', value: '02' },
+          { type: 'num', value: '03' },
+          { type: 'num', value: '04' },
+          { type: 'num', value: '05' },
+          { type: 'num', value: '06' },
+          { type: 'num', value: '07' },
+          { type: 'num', value: '08' },
+          { type: 'num', value: '09' }
+        ],
+        // 照片奖池
+        _2: [
+          { type: 'pic', value: './img/pic/01.jpg' },
+          { type: 'pic', value: './img/pic/02.jpg' },
+          { type: 'pic', value: './img/pic/03.jpg' },
+          { type: 'pic', value: './img/pic/04.jpg' }
+        ],
+        // 奖励奖池
+        _3: [
+          { type: 'txt', value: '带薪年假一天带薪年假一天' },
+          { type: 'txt', value: '带薪年假一周' },
+          { type: 'txt', value: '带薪年假一月带薪年假一天带薪年假一天' },
+          { type: 'txt', value: '带薪年假一年带薪年假一天' }
+        ],
+        // 超级大奖奖池
+        _4: [
+          { type: 'txt', value: '带薪年假一天' },
+          { type: 'pic', value: './img/big-prize/06.jpg' },
+          { type: 'pic', value: './img/big-prize/05.jpg' },
+          { type: 'txt', value: '带薪年假一天带薪年假一天' }
+        ]
+      }
+    },
+    methods: {
+      startDraw() {
+        // 判断是否开始
+        if (this.prize[this.luckKind].length === 0) return alert('这里面全部人都中奖了，不用抽啦！')
+        // 如果可以开始，则先处理页面变化，再处理数据变化（这里需要弄清楚有没有差别，应该是没有）
+        this.showStartBtn = false
+        this.showFireworks = false
+        if (this.prize[this.luckKind].length > 1) { // 当奖池只有一个时不添加定时器
+          this.timer = window.setInterval(() => {
+            this.luckIdx = Math.floor(Math.random() * this.prize[this.luckKind].length)
+            // console.log(this.prize[this.luckKind].length, this.luckIdx)
+          }, 100)
+        }
+      },
+      endDraw() {
+        this.showStartBtn = true
+        this.showFireworks = true
+        window.clearInterval(this.timer)
+
+        // 超级大奖锁定数组第二个元素
+        if (this.luckKind === '_4' && !(localStorage.getItem('isLuckBig'))) {
+          this.luckIdx = 1
+          localStorage.setItem('isLuckBig', '1')
+        }
+        // 从奖池拿出
+        this.luck = this.prize[this.luckKind].splice(this.luckIdx, 1)[0]
+        // 放入中奖池
+        this.luckRes[this.luckKind].push(this.luck)
+        // 同步缓存
+        window.localStorage.setItem('luckRes', JSON.stringify(this.luckRes))
+      },
+      luckKindChange(prop) {
+        if (this.prize[prop].length === 0) return alert('这里面全部人都中奖了，不用抽啦！')
+        window.clearInterval(this.timer)
+        this.luckKind = prop
+        // 重置默认为第一个
+        this.luckIdx = 0
+        this.luck = this.prize[prop][0]
+        this.showFireworks = false
+        this.showStartBtn = true
+      },
+      removeLuck(kind, idx) {
+        // 从中奖池拿出
+        this.removedLuck = this.prize[this.luckKind].splice(this.luckIdx, 1)
+        // 放入奖池
+        // 同步缓存
+        window.localStorage.setItem('luckRes', JSON.stringify(this.luckRes))
+      },
+      removeAll() {
+        if (!this.showStartBtn) {
+          alert('正在抽奖过程中不能清空！')
+        } else {
+          window.localStorage.setItem('luckRes', '')
+          location.reload()
+        }
+      }
+    }
+  })
+</script>
+<script>
+  // 烟花显示几秒后消失
+  // 鼠标移上去显示遮罩
+  // 点击删除
+  // 数据加id
+  // 奖池只剩一个时直接锁定
+  // 命名规范一遍
+  // 以数据流，页面显示，两类的思路编写代码
+
+  // 编码过程中需考虑页面刷新，跳转页面未执行其中代码的情况
+  // 方法边界情况（很重要）
+</script>
+</body>
+</html>
